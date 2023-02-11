@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+
+<suite name="All test suite">
+    <test name="C:\Users\viktor.plakhtii\IdeaProjects\Demoqa">
+        <classes>
+            <class name="TestDemoForm"/>
+        </classes>
+    </test> <!-- Test -->
+</suite> <!-- Suite -->
