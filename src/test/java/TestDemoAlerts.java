@@ -1,37 +1,30 @@
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import pages.AlertsPage;
 
-public class TestDemoAlerts {
+public class TestDemoAlerts extends BaseTest {
     @Test
-    public void testAlert1() throws InterruptedException {
-        System.setProperty("webdriver.chrome.driver", "C:\\tools\\chromedriver\\chromedriver.exe");
-        WebDriver driver = new ChromeDriver();
-        driver.get("https://demoqa.com/alerts");
+    public void testAlert1() {
 
+        AlertsPage alertsPage = openAlertsPage();
 
-        driver.findElement(By.id("alertButton")).click();
-        String alertText = driver.switchTo().alert().getText();
-        Assert.assertEquals(alertText, "You clicked a button");
-        driver.switchTo( ).alert( ).accept();
+        alertsPage.click(By.id("alertButton"));
+        Assert.assertEquals(alertsPage.getAlertText(), "You clicked a button");
+        alertsPage.acceptAlert();
 
-        driver.findElement(By.id("timerAlertButton")).click();
-        Thread.sleep(6000);
-        String timerAlertText = driver.switchTo().alert().getText();
-        Assert.assertEquals(timerAlertText, "This alert appeared after 5 seconds");
-        driver.switchTo( ).alert( ).accept();
+        alertsPage.click(By.id("timerAlertButton"));
+        alertsPage.waitSeconds(5);
+        Assert.assertEquals(alertsPage.getAlertText(), "This alert appeared after 5 seconds");
+        alertsPage.acceptAlert();
 
-        driver.findElement(By.id("confirmButton")).click();
-        String confirmButtonText = driver.switchTo().alert().getText();
-        Assert.assertEquals(confirmButtonText, "Do you confirm action?");
-        driver.switchTo( ).alert( ).accept();
+        alertsPage.click(By.id("confirmButton"));
+        Assert.assertEquals(alertsPage.getAlertText(), "Do you confirm action?");
+        alertsPage.acceptAlert();
 
-        driver.findElement(By.id("promtButton")).click();
-        String promtButtonText = driver.switchTo().alert().getText();
-        driver.switchTo().alert().sendKeys("Test");
-        Assert.assertEquals(promtButtonText, "Please enter your name");
-        driver.switchTo( ).alert( ).accept();
+        alertsPage.click(By.id("promtButton"));
+        alertsPage.sendAlertText("Test");
+        Assert.assertEquals(alertsPage.getAlertText(), "Please enter your name");
+        alertsPage.acceptAlert();
     }
 }

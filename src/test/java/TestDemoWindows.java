@@ -3,51 +3,44 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import pages.WindowsPage;
+
 import java.util.Iterator;
 import java.util.Set;
 
-
-public class TestDemoWindows {
+public class TestDemoWindows extends BaseTest {
     @Test
-    public void testWindows1() throws InterruptedException {
-        System.setProperty("webdriver.chrome.driver", "C:\\tools\\chromedriver\\chromedriver.exe");
-        WebDriver driver = new ChromeDriver();
-        driver.get("https://demoqa.com/browser-windows");
+    public void testWindows1() {
+        WindowsPage windowsPage = openWindowsPage();
 
-        String originalWindow = driver.getWindowHandle();
-        driver.findElement(By.id("tabButton")).click();
+        String originalWindow = windowsPage.getWindowHandle();
+        windowsPage.click(By.id("tabButton"));
 
         //Loop through until we find a new window handle
-        for (String windowHandle : driver.getWindowHandles()) {
+        for (String windowHandle : windowsPage.getWindowHandles()) {
             if (!originalWindow.contentEquals(windowHandle)) {
-                driver.switchTo().window(windowHandle);
+                windowsPage.getWindow(windowHandle);
                 break;
             }
         }
-        String pageText = driver.findElement(By.xpath("//h1")).getText();
-        Assert.assertEquals(pageText, "This is a sample page");
-        //Close the tab or window
-        driver.close();
-        //Switch back to the old tab or window
-        driver.switchTo().window(originalWindow);
+        Assert.assertEquals(windowsPage.getText(By.xpath("//h1")), "This is a sample page");
+        windowsPage.driverClose();
+        windowsPage.getWindow(originalWindow);
 
-        driver.findElement(By.id("windowButton")).click();
-        //Loop through until we find a new window handle
-        for (String windowHandle : driver.getWindowHandles()) {
+        windowsPage.click(By.id("windowButton"));
+        for (String windowHandle : windowsPage.getWindowHandles()) {
             if (!originalWindow.contentEquals(windowHandle)) {
-                driver.switchTo().window(windowHandle);
+                windowsPage.getWindow(windowHandle);
                 break;
             }
         }
-        String windowText = driver.findElement(By.xpath("//h1[@id='sampleHeading']")).getText();
-        Assert.assertEquals(windowText, "This is a sample page");
-        driver.close();
-        //Switch back to the old tab or window
-        driver.switchTo().window(originalWindow);
+        Assert.assertEquals(windowsPage.getText(By.xpath("//h1[@id='sampleHeading']")), "This is a sample page");
+        windowsPage.driverClose();
+        windowsPage.getWindow(originalWindow);
 
-        driver.findElement(By.id("messageWindowButton")).click();
+        windowsPage.click(By.id("messageWindowButton"));
 
-        Set<String> s1 = driver.getWindowHandles();
+        Set<String> s1 = windowsPage.getWindowHandles();
         System.out.println("Child window handle is" + s1);
         Iterator<String> i1 = s1.iterator();
         System.out.println("Child window handle is" + i1);
@@ -55,16 +48,13 @@ public class TestDemoWindows {
         while (i1.hasNext()) {
             String ChildWindow = i1.next();
             if (!originalWindow.equalsIgnoreCase(ChildWindow)) {
-                driver.switchTo().window(ChildWindow);
-                String messageWindowText = driver.findElement(By.xpath("//body")).getText();
+                windowsPage.getWindow(ChildWindow);
+                String messageWindowText = windowsPage.getText(By.xpath("//body"));
                 System.out.println(messageWindowText);
                 Assert.assertEquals(messageWindowText, "Knowledge increases by sharing but not by saving. Please share this website with your friends and in your organization.");
-                driver.close();
-
             }
+
         }
-
-
 
 
     }

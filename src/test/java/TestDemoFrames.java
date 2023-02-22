@@ -1,31 +1,22 @@
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import pages.FramesPage;
 
-public class TestDemoFrames {
+public class TestDemoFrames extends BaseTest {
     @Test
     public void testFrame1() {
-        System.setProperty("webdriver.chrome.driver", "C:\\tools\\chromedriver\\chromedriver.exe");
-        WebDriver driver = new ChromeDriver();
-        driver.get("https://demoqa.com/frames");
-        driver.manage().window().maximize();
+        FramesPage framesPage = openFramesPage();
 
-        WebElement iframeElement1 = driver.findElement(By.id("frame1"));
-        driver.switchTo().frame(iframeElement1);
-        String f1 = driver.findElement(By.xpath("//body")).getText();
-        Assert.assertEquals(f1, "This is a sample page");
-        System.out.println(f1);
+        WebElement iframeElement1 = framesPage.getElementBy(By.id("frame1"));
+        framesPage.findFrame(iframeElement1);
+        Assert.assertEquals(framesPage.getElementBy(By.xpath("//body")).getText(), "This is a sample page");
+        framesPage.defaultFrame();
 
-        driver.switchTo().defaultContent();
-
-        WebElement iframeElement2 = driver.findElement(By.id("frame2"));
-        driver.switchTo().frame(iframeElement2);
-        String f2 = driver.findElement(By.xpath("//h1[@id='sampleHeading']")).getText();
-        Assert.assertEquals(f2, "This is a sample page");
-        System.out.println(f2);
+        WebElement iframeElement2 = framesPage.getElementBy(By.id("frame2"));
+        framesPage.findFrame(iframeElement2);
+        Assert.assertEquals(framesPage.getElementBy(By.xpath("//h1[@id='sampleHeading']")).getText(), "This is a sample page");
 
     }
 }
